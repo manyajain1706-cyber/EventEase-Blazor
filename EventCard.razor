@@ -1,0 +1,26 @@
+<article class="event-card">
+    <div class="event-card-top">
+        <span class="event-label">EVENT #@Event.Id</span>
+        <span class="date-chip">@Event.Date.ToString("dd MMM")</span>
+    </div>
+    <h3>@Event.Title</h3>
+    <p class="muted">📍 @Event.Location</p>
+    <p class="muted">🗓️ @Event.Date.ToString("dddd, dd MMMM yyyy")</p>
+    <div class="capacity-row">
+        <span>@Event.RegisteredCount / @Event.Capacity registered</span>
+        <span>@(Event.Capacity - Event.RegisteredCount) spots left</span>
+    </div>
+    <div class="progress-track">
+        <div class="progress-fill" style="width:@Progress%"></div>
+    </div>
+    <a class="text-link" href="/register?eventId=@Event.Id">Register →</a>
+</article>
+
+@code {
+    [Parameter, EditorRequired]
+    public EventItem Event { get; set; } = new();
+
+    private int Progress => Event.Capacity <= 0
+        ? 0
+        : Math.Clamp(Event.RegisteredCount * 100 / Event.Capacity, 0, 100);
+}
